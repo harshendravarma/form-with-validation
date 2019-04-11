@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
+</head>
+<body>
+<div class="container">
+<form action="form.php" method="POST">
+
+NAME:<input type="text" name="name"><br>
+EAMIL:<input type="text" name="email"><br>
+GENDER:<input type="radio" name="gender" value="male">
+<input type="radio" name="gender" value="female"><br>
+AGE:<input type="number" name="age"><br>
+
+LOCATION;<select name="location">
+  <option value="gurgaon">Gurgaon</option>
+  <option value="hyderbad">Hyderabad</option>
+</select>
+<br>
+PHONENUMBER:<input type="number" name="phonenumber"><br>
+DATE OF JOINING<input type="date" name="date" min="2019-01-01" max="2019-10-01"><br>
+DEGREE:<select name="degree">
+  <option value="graduation">Graduation</option>
+  <option value="pg">Pg</option>
+  <option value="others">others</option>
+</select>
+<br>
+ADDRESS:<textarea placeholder="address" ></textarea><br>
+<input type="checkbox" value="checked" name="agrement">I Agree<br>
+
+<input type="submit" >
+</form>
+</div>
+
+</body>
+
+<?php
+session_start();
+
+if(empty($_POST[name]) || empty($_POST[email]) || empty($_POST[age])||empty($_POST[phonenumber])||empty($_POST[date])){
+
+echo "<p>all feilds are mandatory</p>";
+}
+else {
+        setcookie("location",$_POST[location],time()+100000); 
+        $_SESSION['date']=$_POST[date];
+        $_SESSION['degree']=$_POST[degree];
+
+
+        if($_POST['agrement']!="checked"){
+        echo "<p>please agree Terms and condotions</p> <br>";
+        
+        }
+        else{
+            setcookie("agrement",$_POST[agrement],time()+100000);  
+        }
+        if(strlen(trim($_POST[name]," "))>50){
+            echo "<p>name should be less than 50 characters</p> <br>";    
+        }
+        else{
+            $_SESSION['name']=$_POST[name];
+        }
+        if(strlen(trim($_POST[email]," "))>50 || !strpos($_POST[email],'@') ){
+            echo "<p>email is invalid</p><br>";
+        }
+        else{
+            $_SESSION['email']=$_POST[email];
+        }
+        if($_POST[age]<18 || $_POST[age]>75 ){
+            echo "<p>age must be between 18 and 75 </p><br>";
+        }
+        else{
+            $_SESSION['age']=$_POST[age];
+        }
+        if(strlen((string)trim($_POST[phonenumber]," "))!=10 || (string)trim($_POST[phonenumber]," ")[0]<=5){
+            echo "<p>phonenumber is invalid</p>";
+        
+        }
+        else{
+            $_SESSION['phone']=$_POST[phonenumber];
+        }
+        if(strlen(trim($_POST[address]," "))){
+            echo "<p>adress must be less than 200 characters</p>";
+        }
+        else{
+            setcookie("address",$_POST[address],time()+100000); 
+        }
+
+  echo "print_r output :<br>";
+  echo "<br>";
+  echo "<br>";
+  print_r($_POST);
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  print_r($_COOKIE);
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  print_r($_SESSION);
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  echo "var_dump output : <br>";
+  echo "<br>";
+  echo "<br>";
+  var_dump($_POST);
+
+}
+?>
+
+</html>
+
+
+
+
+<style>
+p {
+  
+  color:red
+}
+</style>
