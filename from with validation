@@ -1,145 +1,128 @@
+
 <!DOCTYPE html>
 <html>
 <head>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- <title>Formfilling</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
 </head>
 <body>
-<div id="main_container">
-    <div class="header">
-      <div>
-          <table>
-              <tr>
-                 <td> 
-                     <div>
-                         <form>
-                             <input type="image" src="kellton_logo.jpg" />
-                         </form>           
-                     </div>
-                 </td>
+<div class="container">
+<form action="form.php" method="POST">
 
-                  <td>
-                     <div id="links">
-                         <span><a href="http://www.youtube.com">Home</a></span> | 
-                         <span><a href="http://www.youtube.com">Products</a></span> | 
-                         <span><a href="http://www.youtube.com">Company</a></span> | 
-                         <span><a href="http://www.youtube.com">Blog</a></span>
-                     </div>
-                 </td>
-              </tr>
-         </table>
-     </div>
-        <div id="search">
-            <form>
-                 <input type="text" placeholder="search">
-                 <button class="btn"><i class="fa fa-search"></i></button>
-            </form>
-        </div>
+NAME:<input type="text" name="name"><br>
+EAMIL:<input type="text" name="email"><br>
+GENDER:<input type="radio" name="gender" value="male">
+<input type="radio" name="gender" value="female"><br>
+AGE:<input type="number" name="age"><br>
 
-    </div>
+LOCATION;<select name="location">
+  <option value="gurgaon">Gurgaon</option>
+  <option value="hyderbad">Hyderabad</option>
+</select>
+<br>
+PHONENUMBER:<input type="number" name="phonenumber"><br>
+DATE OF JOINING<input type="date" name="date" min="2019-01-01" max="2019-10-01"><br>
+DEGREE:<select name="degree">
+  <option value="graduation">Graduation</option>
+  <option value="pg">Pg</option>
+  <option value="others">others</option>
+</select>
+<br>
+ADDRESS:<textarea placeholder="address" ></textarea><br>
+<input type="checkbox" value="checked" name="agrement">I Agree<br>
 
-    <div class="body">
-        <hr>
-        <h1 id="formtitle">Online Registration</h1>
-        <p id="formpara">Kellton Tech Solutions Ltd. is an Indian information technology and outsourcing company headquartered in Hyderabad, India with offices in United States and Europe.The company reported net revenues of 7.39 billion with more than 1400 employees. Wikipedia</p>
-        <table>
-            <tr>
-                 <td><h3>Title</h3></td>
-                 <td>
-                     <select multiple size="1">
-                     <option selected>Mr.</option>
-                     <option>Mrs.</option></select>
-                 </td>                
-            </tr>
-
-            <tr>
-                 <td><h3>FirstName</h3></td>
-                 <td><input type="text" placeholder="First name"/></td>
-            </tr>
-
-            <tr>
-                 <td><h3>LastName</h3></td>
-                 <td><input type="text" placeholder="Second name"/></td>
-            </tr> 
-            
-            <tr>
-                 <td><h3>DOB</h3></td>
-                 <td> <input type="date"/></td>
-            </tr>
-
-            <tr>
-                 <td><h3>Full Address</h3></td>
-                 <td><textarea rows="10" cols="20">full address</textarea></td>
-            </tr>
-
-            <tr>
-            <td><h3>Items you want</h3></td>    
-                 <td>
-                     <textarea rows="10" cols="20">
-                     item one
-                     item two
-                     item three
-                     </textarea>
-                 </td>
-            </tr>
-
-            <tr>
-                 <td><h3>choose any</h3></td>
-                 <td>
-                     <input type="radio" name="choise" value="1" >choise one<br>
-                      <input type="radio" name="choise" value="2">choise two<br>
-                      <input type="radio" name="choise" value="3">choise three<br>
-                 </td> 
-            </tr>
-
-            <tr>
-                 <td><h3>Increment Number</h3></td> 
-                 <td><input type="number" value="1" min="1" max="4" ></td>
-            </tr>
-
-            <tr>
-                <div id=check_box> 
-                  <input type="checkbox" value="on" name="checkbox" >  agree with terms and conditions 
-                </div>   
-            </tr>
-
-            <tr>
-                 <td><button type="submit">Register</button></td>
-                 <td><button type="submit">SaveDraft</button></td>
-            </tr>
-
-        </table>
-             
-
-
-    </div>
-
-
-
-
-
+<input type="submit" >
+</form>
 </div>
-</body>    
+
+</body> 
+
+<?php
+session_start();
+
+if(empty($_POST[name]) || empty($_POST[email]) || empty($_POST[age])||empty($_POST[phonenumber])||empty($_POST[date])){
+
+echo "<p>all feilds are mandatory</p>";
+}
+else {
+        setcookie("location",$_POST[location],time()+100000); 
+        $_SESSION['date']=$_POST[date];
+        $_SESSION['degree']=$_POST[degree];
+
+
+        if($_POST['agrement']!="checked"){
+        echo "<p>please agree Terms and condotions</p> <br>";
+        
+        }
+        else{
+            setcookie("agrement",$_POST[agrement],time()+100000);  
+        }
+        if(strlen(trim($_POST[name]," "))>50){
+            echo "<p>name should be less than 50 characters</p> <br>";    
+        }
+        else{
+            $_SESSION['name']=$_POST[name];
+        }
+        if(strlen(trim($_POST[email]," "))>50 || !strpos($_POST[email],'@') ){
+            echo "<p>email is invalid</p><br>";
+        }
+        else{
+            $_SESSION['email']=$_POST[email];
+        }
+        if($_POST[age]<18 || $_POST[age]>75 ){
+            echo "<p>age must be between 18 and 75 </p><br>";
+        }
+        else{
+            $_SESSION['age']=$_POST[age];
+        }
+        if(strlen((string)trim($_POST[phonenumber]," "))!=10 || (string)trim($_POST[phonenumber]," ")[0]<=5){
+            echo "<p>phonenumber is invalid</p>";
+        
+        }
+        else{
+            $_SESSION['phone']=$_POST[phonenumber];
+        }
+        if(strlen(trim($_POST[address]," "))){
+            echo "<p>adress must be less than 200 characters</p>";
+        }
+        else{
+            setcookie("address",$_POST[address],time()+100000); 
+        }
+
+  echo "print_r output :<br>";
+  echo "<br>";
+  echo "<br>";
+  print_r($_POST);
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  print_r($_COOKIE);
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  print_r($_SESSION);
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  echo "<br>";
+  echo "var_dump output : <br>";
+  echo "<br>";
+  echo "<br>";
+  var_dump($_POST);
+
+}
+?>
+
 </html>
+
+
+
+
 <style>
-.header
-{
-width: 100%;
-height:300px;
+p {
+  
+  color:red
 }
-#formtitle{
-    text-align: center;
-}
-#formpara{
-    text-align: center;
-}
-#search{
-    float: right;
-}
-#links{
-    float:center;
-}
-table,tr,td{
-padding:5pt;
-}
-</style>
+</style> -->
